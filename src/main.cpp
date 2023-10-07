@@ -19,7 +19,7 @@ void dataHandle();
 int counter = 0;
 uint8_t seconds = 0;
 uint8_t  minutes = 0;
-uint8_t hours = 16;
+uint8_t hours = 0;
 
 uint8_t day = 25; 
 uint8_t month = 9; 
@@ -36,35 +36,19 @@ void setup()
 //   Serial.println("Starting setup");
   rtc.begin();
   rtc.setTime(hours, minutes, seconds);
-//   //configureRTC();
-//   rtc.attachInterrupt(sleepHandler);
-//   rtc.setAlarmDay(day);
-//   rtc.setAlarmTime(16, 0, 10, 123);
-//   rtc.enableAlarm(rtc.MATCH_DHHMMSS);
 
-// //   while(!rtc.isAlarmEnabled()){
-// //   set += 5;
-// //   Serial.print("rtc is not enabled set: ");
-// //   Serial.println(set);
-// //   rtc.setAlarmTime(16, 0, set, 123);
-// //   rtc.enableAlarm(rtc.MATCH_DHHMMSS);
-// //   delay(1000);
-// // }
-//   Serial.println("alarm is enabled");
 } 
 void loop() {
 
   dataHandle();
   rtc.getTime(&hours, &minutes, &seconds, nullptr, nullptr);
-
-  Serial.println("hour: " + String(hours) + " minutes: " + String(minutes) + " seconds: " + String(seconds));
+  String timeString = "hour: " + String(hours) + " minutes: " + String(minutes) + " seconds: " + String(seconds);
+  Serial.println(timeString);
   delay(1000);
 
   // Serial.println( "Go back to sleep");
-
-  // LoRa.sleep();
-   LowPower.begin();
-   LowPower.deepSleep(60000);
+  LowPower.begin();
+  LowPower.deepSleep(900000);
 
 }
 // put function definitions here:
@@ -116,9 +100,11 @@ void dataHandle() {
   loraTransmitter.sendMessage(message);
   counter ++;
   delay(1000);
-
+  rtc.getTime(&hours, &minutes, &seconds, nullptr, nullptr);
+  String timeString = "hour: " + String(hours) + " minutes: " + String(minutes) + " seconds: " + String(seconds);
+  dataLogger.initSDCard();
+  dataLogger.writeLog(timeString);
   dataLogger.initSDCard();
   dataLogger.writeLog(message);
-  delay(1000);
 }
 

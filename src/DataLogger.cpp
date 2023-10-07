@@ -26,7 +26,6 @@ void DataLogger::initSDCard() {
   }
   
   Serial.println("Initialization done.");
-  delay(1000);
 }
 
 void DataLogger::writeLog(String message) {
@@ -35,13 +34,17 @@ void DataLogger::writeLog(String message) {
     Serial.println("Creating log.txt");
     File logFile = sd.open("log.txt", O_RDWR | O_CREAT | O_AT_END);
     if (logFile){
-
       logFile.close();
     } else {
       Serial.println("Could not create log.txt");
       return;
     }
   }
+  delay(1000);
+
+  // Serial.print(" Log.txt exist status ");
+  // int status = sd.exists("log.txt");
+  // Serial.println(status);
 
   File logFile = sd.open("log.txt", O_RDWR | O_CREAT | O_AT_END);
   if (logFile) {
@@ -52,9 +55,8 @@ void DataLogger::writeLog(String message) {
     Serial.println("Error opening log.txt");
   }
   
-  SPI.end();
   sd.end();
-  
+  SPI.end();
   //digitalWrite(CHIP_SELECT_PIN, HIGH); 
 }
 

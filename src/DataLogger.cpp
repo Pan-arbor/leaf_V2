@@ -28,7 +28,7 @@ void DataLogger::initSDCard() {
   Serial.println("Initialization done.");
 }
 
-void DataLogger::writeLog(String message) {
+void DataLogger::writeLog(String message, String timeString) {
 
   if (!sd.exists("log.txt")) {
     Serial.println("Creating log.txt");
@@ -37,6 +37,8 @@ void DataLogger::writeLog(String message) {
       logFile.close();
     } else {
       Serial.println("Could not create log.txt");
+      //call a debug function that flash the LED
+      
       return;
     }
   }
@@ -48,7 +50,9 @@ void DataLogger::writeLog(String message) {
 
   File logFile = sd.open("log.txt", O_RDWR | O_CREAT | O_AT_END);
   if (logFile) {
+    logFile.println(timeString);
     logFile.println(message);
+    logFile.println("\n");
     logFile.close();
     Serial.println("Log written");
   } else {

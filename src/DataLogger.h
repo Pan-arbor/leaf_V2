@@ -15,7 +15,7 @@ class DataLogger {
 public:
   DataLogger();
   void initSDCard();
-  void writeLog(String message);
+  void writeLog(String message, String timeString);
 };
 
 #endif

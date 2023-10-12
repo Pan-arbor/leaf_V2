@@ -1,6 +1,6 @@
 #ifndef TemperatureSensor_h
 #define TemperatureSensor_h
-#define tempBus PB8
+#define tempBus PA8
 
 #include <OneWire.h>
 #include <DallasTemperature.h>

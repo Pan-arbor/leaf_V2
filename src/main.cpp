@@ -25,15 +25,16 @@ uint8_t day = 25;
 uint8_t month = 9; 
 uint8_t year = 15;   // Not used, but required for the function call
 
-uint8_t alarm_sec;
-uint8_t alarm_min;
-uint8_t alarm_hour;
-uint8_t set = 0;
+// uint8_t alarm_sec;
+// uint8_t alarm_min;
+// uint8_t alarm_hour;
+// uint8_t set = 0;
 
 void setup() 
 {
   Serial.begin(115200);
 //   Serial.println("Starting setup");
+  rtc.setClockSource(STM32RTC::LSE_CLOCK);
   rtc.begin();
   rtc.setTime(hours, minutes, seconds);
 
@@ -52,37 +53,6 @@ void loop() {
 
 }
 // put function definitions here:
-
-// void configureRTC() {
-
-//   rtc.getTime(&alarm_hour, &alarm_min, &alarm_sec, nullptr, nullptr);
-
-//   alarm_sec += 10;
-//   if (alarm_sec >= 60) {
-//     alarm_sec -= 60;
-//     alarm_min++;
-
-//     if (alarm_min >= 60) {
-//       alarm_min -= 60;
-//       alarm_hour++;
-
-//       if (hours >= 24) {
-//         hours = 0;
-//       }
-//     }
-//   Serial.println("Alarm Configured and Enabled for 5 seconds");
-// }
-// }
-
-// void sleepHandler(void *data) {
-//   // Handle what to do when MCU wakes up
-//   Serial.println("wake up");// Reconfigure the RTC alarm for the next wake-up
-//   UNUSED(data);
-//   dataHandle();
-//   configureRTC();
-//   rtc.setAlarmTime(alarm_hour, alarm_min, alarm_sec, 123);
-//   rtc.enableAlarm(rtc.MATCH_HHMMSS);
-// }
 
 void dataHandle() {
 
@@ -103,8 +73,7 @@ void dataHandle() {
   rtc.getTime(&hours, &minutes, &seconds, nullptr, nullptr);
   String timeString = "hour: " + String(hours) + " minutes: " + String(minutes) + " seconds: " + String(seconds);
   dataLogger.initSDCard();
-  dataLogger.writeLog(timeString);
-  dataLogger.initSDCard();
-  dataLogger.writeLog(message);
+  dataLogger.writeLog(message, timeString);
+
 }
 

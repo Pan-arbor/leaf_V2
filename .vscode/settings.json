@@ -80,5 +80,6 @@
     "ranges": "cpp",
     "streambuf": "cpp",
     "system_error": "cpp"
-  }
+  },
+  "C_Cpp_Runner.msvcSecureNoWarnings": false
 }

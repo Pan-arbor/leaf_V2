@@ -21,7 +21,7 @@ uint8_t seconds = 0;
 uint8_t  minutes = 0;
 uint8_t hours = 0;
 
-uint8_t day = 25; 
+uint8_t day = 1; 
 uint8_t month = 9; 
 uint8_t year = 15;   // Not used, but required for the function call
 
@@ -44,7 +44,7 @@ void loop() {
   dataHandle();
   rtc.getTime(&hours, &minutes, &seconds, nullptr, nullptr);
   String timeString = "hour: " + String(hours) + " minutes: " + String(minutes) + " seconds: " + String(seconds);
-  Serial.println(timeString);
+  //Serial.println(timeString);
   delay(1000);
 
   // Serial.println( "Go back to sleep");
@@ -62,17 +62,17 @@ void dataHandle() {
 
   pinMode (tempBus, INPUT_PULLUP);
   float temp = getTemperature();
-  String message = "index " + String(counter) + " Temperature: " + String(temp) + "C";
   
   loraTransmitter.setupLoRa();
-  Serial.print("Starting Sending packet: ");
-  Serial.println(message);
+  Serial.print("Starting Sending packet with temp: ");
+  Serial.print(String(temp) + " at ");
+  rtc.getTime(&hours, &minutes, &seconds, nullptr, nullptr);
+  String timeString = String(hours) + ":" + String(minutes) + ":" + String(seconds);
+  Serial.println(timeString);
+  dataLogger.initSDCard();
+  String message =String(counter) + "," + String(hours) + "," + String(minutes) + "," + String(seconds) + "," + String(temp) + "C";
   loraTransmitter.sendMessage(message);
   counter ++;
-  delay(1000);
-  rtc.getTime(&hours, &minutes, &seconds, nullptr, nullptr);
-  String timeString = "hour: " + String(hours) + " minutes: " + String(minutes) + " seconds: " + String(seconds);
-  dataLogger.initSDCard();
   dataLogger.writeLog(message, timeString);
 
 }

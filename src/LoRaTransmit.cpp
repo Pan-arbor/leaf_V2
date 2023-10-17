@@ -38,6 +38,7 @@ void LoRaTransmit::sendMessage(String message) {
   // Send message
   LoRa.beginPacket();
   LoRa.print(message);
+  delay(3000);
   LoRa.endPacket();
   LoRa.end();
   digitalWrite(ss, HIGH);

@@ -34,6 +34,8 @@ void DataLogger::writeLog(String message, String timeString) {
     Serial.println("Creating log.txt");
     File logFile = sd.open("log.txt", O_RDWR | O_CREAT | O_AT_END);
     if (logFile){
+      logFile.println("index, hour, minute, second, temperature");
+      logFile.println();
       logFile.close();
     } else {
       Serial.println("Could not create log.txt");
@@ -50,9 +52,7 @@ void DataLogger::writeLog(String message, String timeString) {
 
   File logFile = sd.open("log.txt", O_RDWR | O_CREAT | O_AT_END);
   if (logFile) {
-    logFile.println(timeString);
     logFile.println(message);
-    logFile.println("\n");
     logFile.close();
     Serial.println("Log written");
   } else {
